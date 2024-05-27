@@ -11,7 +11,7 @@ class MiscellaneousExpense(Document):
         self.submit_journal_entry()
 
 
-    def submit_journal_entry(self):
+    def create_journal_entry(self):
         try:
             default_company = frappe.defaults.get_user_default("Company")
             hrc = frappe.get_doc("Company", default_company)

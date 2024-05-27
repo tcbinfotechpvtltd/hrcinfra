@@ -1,0 +1,53 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-05-27 14:53:20.261801",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "description",
+  "drawing_number",
+  "unit",
+  "quantity"
+ ],
+ "fields": [
+  {
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Description"
+  },
+  {
+   "fieldname": "drawing_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Drawing Number"
+  },
+  {
+   "fieldname": "unit",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Unit",
+   "options": "Meter (m)\nMillimeter (mm)\nFoot (ft)\nInch (in)\nSquare Meter (m\u00b2)\nSquare Foot (ft\u00b2)\nCubic Meter (m\u00b3)\nLiter (L)\nNumber of items (nos)\nNumber of devices (nos)\nNumber of fixtures (nos)\nAmpere (A)\nVolt (V)\nWatt (W)\nKilowatt-hour (kWh)\nOhm (\u03a9)\nHour (hr)\nMinute (min)\nSecond (sec)\nKilogram (kg)\nGram (g)\nDollar ($)\nEuro (\u20ac)\nPound (\u00a3)\nLocal currency"
+  },
+  {
+   "fieldname": "quantity",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Quantity"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-05-27 15:01:38.340661",
+ "modified_by": "Administrator",
+ "module": "HRC Infra",
+ "name": "Inspection Insulator Table",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

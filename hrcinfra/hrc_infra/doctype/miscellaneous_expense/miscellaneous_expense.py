@@ -7,14 +7,11 @@ from frappe.model.document import Document
 
 class MiscellaneousExpense(Document):
 
-    def after_insert(self):
-        self.create_journal_entry()
-
     def on_submit(self):
         self.submit_journal_entry()
 
 
-    def create_journal_entry(self):
+    def submit_journal_entry(self):
         try:
             default_company = frappe.defaults.get_user_default("Company")
             hrc = frappe.get_doc("Company", default_company)
@@ -47,16 +44,7 @@ class MiscellaneousExpense(Document):
             )
 
             je.insert()
-
-        except Exception as e:
-            frappe.throw(f"Error creating journal entry: {str(e)}")
-
-    def submit_journal_entry(self):
-        try:
-            je = frappe.get_last_doc("Journal Entry")
-
-            if je.docstatus == 0:
-                je.submit()
+            je.submit()
 
         except Exception as e:
             frappe.throw(f"Error submitting journal entry: {str(e)}")

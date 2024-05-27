@@ -17,8 +17,6 @@ class MiscellaneousExpense(Document):
 
 def create_journal_entry(self):
     try:
-        hrc_infra = frappe.get_doc('Company','HRC Infra')
-        print(hrc_infra.company_name)
 
         je = frappe.new_doc('Journal Entry')
         je.voucher_type = 'Journal Entry'
@@ -45,21 +43,14 @@ def create_journal_entry(self):
 
         je.insert()
         
-        # self.journal_entry = je.name
     except Exception as e:
         frappe.throw(f"Error creating journal entry: {str(e)}")
 
 def submit_journal_entry(self):
     try:
-            # je = frappe.get_doc('Journal Entry', self.journal_entry)
             je = frappe.get_last_doc('Journal Entry')
-            
-            print("-")
-            print(je)
-            print("-")
-            
 
-            if je.docstatus == 0:  # Check if not already submitted
+            if je.docstatus == 0: 
                 je.submit()
                 
     except Exception as e:

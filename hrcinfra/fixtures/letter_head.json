@@ -1,0 +1,25 @@
+[
+ {
+  "align": "Center",
+  "content": "\n<header>\n    <div class=\"hrc-top\">\n        <div class=\"shape\">\n            <div class=\"line\"></div>\n        </div>\n        \n        <div class=\"text-right hrc\">\n            <h1 class=\"txt-color fs-1 fw-bold hrc-name\">HRC INFRA PVT. LTD.</h1>\n            <p>H.NO. 1786, Sector 14, Hisar(Haryana) - 125001</p>\n            <p>Contact: 9355590866, 9107170000</p>\n            <p>E-mail : kamal@hrc.net.in</p>\n            <p class=\"fw-bold\">CIN : U45400HR2013PTC051339</p>\n    </div>\n    </div>\n    \n    \n<p class=\"text-center txt-color fw-bold mt-3\">\"A\" CLASS ELECTRICAL CONTRACTOR</p>\n\n<div class=\"flex-row\">\n    <p>Ref. No. {{doc.ref_no}}</p>\n    <p>Dated {{doc.date}}</p>\n</div>\n</header>\n\n",
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Letter Head",
+  "footer": "<div class=\"footer-sec\">\n    <div class=\"first\"></div>\n    <div class=\"mid\">\n        A MSME, ASSISTED BY NSIC\n    </div>\n    <div class=\"last\"></div>\n</div>",
+  "footer_align": "Left",
+  "footer_image": null,
+  "footer_image_height": 0.0,
+  "footer_image_width": 0.0,
+  "footer_script": null,
+  "footer_source": "HTML",
+  "header_script": null,
+  "image": null,
+  "image_height": 0.0,
+  "image_width": 0.0,
+  "is_default": 1,
+  "letter_head_name": "HRC Infra Pvt Ltd",
+  "modified": "2024-05-29 12:45:21.067007",
+  "name": "HRC Infra Pvt Ltd",
+  "source": "HTML"
+ }
+]

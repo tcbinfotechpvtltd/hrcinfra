@@ -1,0 +1,152 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:ref_no",
+ "creation": "2024-06-03 16:30:03.551005",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_wyjc",
+  "column_break_hasr",
+  "ref_no",
+  "company",
+  "letter_type",
+  "site",
+  "date",
+  "to1",
+  "to2",
+  "subject",
+  "insp_message",
+  "table_insp",
+  "place_of_inspection",
+  "no_of_days_for_inspection",
+  "contact_person",
+  "weekly_off_day",
+  "shutdown_message",
+  "shutdown_return_message"
+ ],
+ "fields": [
+  {
+   "default": "HRCIN",
+   "fieldname": "company",
+   "fieldtype": "Data",
+   "label": "Company"
+  },
+  {
+   "fieldname": "letter_type",
+   "fieldtype": "Select",
+   "label": "Letter Type",
+   "options": "Inspection Insulator\nShutdown\nShutdown Return"
+  },
+  {
+   "fieldname": "ref_no",
+   "fieldtype": "Data",
+   "label": "Ref No",
+   "unique": 1
+  },
+  {
+   "fieldname": "site",
+   "fieldtype": "Link",
+   "label": "Site",
+   "options": "Site"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "to1",
+   "fieldtype": "Data",
+   "label": "To1"
+  },
+  {
+   "fieldname": "to2",
+   "fieldtype": "Data",
+   "label": "To2"
+  },
+  {
+   "default": "SUB: ",
+   "fieldname": "subject",
+   "fieldtype": "Small Text",
+   "label": "Subject"
+  },
+  {
+   "fieldname": "column_break_hasr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_wyjc",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "Refer to subject cited above, the following material will be ready for the inspection on {{ Date }} you are required to please depute/arrange the inspection accordingly.",
+   "fieldname": "insp_message",
+   "fieldtype": "Small Text",
+   "label": "Message"
+  },
+  {
+   "default": "We are requesting a shutdown of the abovesaid line for ..........\n\n\nIt is certified that all the material is available on site and sufficient manpower is available for the completion of work in the requested time.",
+   "fieldname": "shutdown_message",
+   "fieldtype": "Text",
+   "label": "Message"
+  },
+  {
+   "default": "This is to inform you that all work is completed of subject cited line as per technical specification and as per contract. All men, labor and T&P removed from this line.\n\nAlso inform you that all dismantle material is removed from site and return to HVPNL Store.\n\nTherefore, I request you to kindly return shutdown and charging of subject cited line.",
+   "fieldname": "shutdown_return_message",
+   "fieldtype": "Text",
+   "label": "Message"
+  },
+  {
+   "fieldname": "table_insp",
+   "fieldtype": "Table",
+   "options": "Inspection Insulator Table"
+  },
+  {
+   "fieldname": "place_of_inspection",
+   "fieldtype": "Data",
+   "label": "Place of Inspection"
+  },
+  {
+   "fieldname": "no_of_days_for_inspection",
+   "fieldtype": "Data",
+   "label": "No. of days for Inspection"
+  },
+  {
+   "fieldname": "contact_person",
+   "fieldtype": "Data",
+   "label": "Contact Person"
+  },
+  {
+   "fieldname": "weekly_off_day",
+   "fieldtype": "Select",
+   "label": "Weekly off day",
+   "options": "Sunday\nMonday\nTuesday\nWednesday\nThursday\nFriday\nSaturday"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-06-04 12:26:38.048356",
+ "modified_by": "Administrator",
+ "module": "HRC Infra",
+ "name": "General Letter",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

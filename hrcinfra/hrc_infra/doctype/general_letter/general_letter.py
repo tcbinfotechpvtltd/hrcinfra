@@ -4,19 +4,17 @@
 import frappe
 from frappe.model.document import Document
 from datetime import date
+from hrcinfra.hrc_infra.constants import letter_types
 
 
 class GeneralLetter(Document):
     pass
 
 
-
-
-
 @frappe.whitelist()
 def generate_ref_no(company, letter_type):
     # create ref_no for letter
-	
+
     curr_year = str(date.today().year)[2:]
     next_year = str(int(curr_year) + 1)
     letter_type_abbr = ""
@@ -30,7 +28,7 @@ def generate_ref_no(company, letter_type):
         },
     )
 
-    if letter_type and letter_type == "Inspection Insulator":
+    if letter_type and letter_type == letter_types[0]:
         letter_type_abbr = "INSP/"
         letter_num = insp_letter_num
     else:

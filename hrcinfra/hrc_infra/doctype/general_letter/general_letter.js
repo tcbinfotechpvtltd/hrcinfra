@@ -2,6 +2,7 @@
 // For license information, please see license.txt
 frappe.ui.form.on("General Letter", {
   refresh: function (frm) {
+    frm.set_value("date", new Date());
     frm.trigger("toggle_fields");
     frm.trigger("update_ref_no");
   },
@@ -13,38 +14,6 @@ frappe.ui.form.on("General Letter", {
   },
   company: function (frm) {
     frm.trigger("update_ref_no");
-  },
-
-  // Function to toggle visibility of fields
-  toggle_fields: function (frm) {
-    if (frm.doc.letter_type === "Inspection Insulator") {
-      frm.set_df_property("table_insp", "hidden", 0);
-      frm.set_df_property("insp_message", "hidden", 0);
-      frm.set_df_property("place_of_inspection", "hidden", 0);
-      frm.set_df_property("no_of_days_for_inspection", "hidden", 0);
-      frm.set_df_property("contact_person", "hidden", 0);
-      frm.set_df_property("weekly_off_day", "hidden", 0);
-      frm.set_df_property("shutdown_message", "hidden", 1);
-      frm.set_df_property("shutdown_return_message", "hidden", 1);
-    } else if (frm.doc.letter_type === "Shutdown") {
-      frm.set_df_property("table_insp", "hidden", 1);
-      frm.set_df_property("insp_message", "hidden", 1);
-      frm.set_df_property("place_of_inspection", "hidden", 1);
-      frm.set_df_property("no_of_days_for_inspection", "hidden", 1);
-      frm.set_df_property("contact_person", "hidden", 1);
-      frm.set_df_property("weekly_off_day", "hidden", 1);
-      frm.set_df_property("shutdown_message", "hidden", 0);
-      frm.set_df_property("shutdown_return_message", "hidden", 1);
-    } else {
-      frm.set_df_property("table_insp", "hidden", 1);
-      frm.set_df_property("insp_message", "hidden", 1);
-      frm.set_df_property("place_of_inspection", "hidden", 1);
-      frm.set_df_property("no_of_days_for_inspection", "hidden", 1);
-      frm.set_df_property("contact_person", "hidden", 1);
-      frm.set_df_property("weekly_off_day", "hidden", 1);
-      frm.set_df_property("shutdown_message", "hidden", 1);
-      frm.set_df_property("shutdown_return_message", "hidden", 0);
-    }
   },
 
   // get ref_no

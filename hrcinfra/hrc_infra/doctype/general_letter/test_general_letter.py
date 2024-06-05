@@ -5,5 +5,5 @@
 from frappe.tests.utils import FrappeTestCase
 
 
-class TestShutdown(FrappeTestCase):
+class TestGeneralLetter(FrappeTestCase):
 	pass

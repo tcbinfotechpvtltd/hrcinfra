@@ -1,0 +1,145 @@
+{
+ "actions": [],
+ "autoname": "field:ref_no",
+ "creation": "2024-06-03 16:30:03.551005",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_wyjc",
+  "column_break_hasr",
+  "letter_type",
+  "company",
+  "site",
+  "column_break_hecp",
+  "ref_no",
+  "date",
+  "table_insp",
+  "place_of_inspection",
+  "no_of_days_for_inspection",
+  "contact_person",
+  "weekly_off_day",
+  "section_break_tsou",
+  "to",
+  "subject",
+  "body"
+ ],
+ "fields": [
+  {
+   "default": "HRCIN",
+   "fieldname": "company",
+   "fieldtype": "Data",
+   "label": "Company"
+  },
+  {
+   "fieldname": "letter_type",
+   "fieldtype": "Select",
+   "label": "Letter Type",
+   "options": "Inspection Insulator\nShutdown\nShutdown Return"
+  },
+  {
+   "fieldname": "ref_no",
+   "fieldtype": "Data",
+   "label": "Ref No",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "site",
+   "fieldtype": "Link",
+   "label": "Site",
+   "options": "Site"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "subject",
+   "fieldtype": "Data",
+   "label": "Subject"
+  },
+  {
+   "fieldname": "column_break_hasr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_wyjc",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "table_insp",
+   "fieldtype": "Table",
+   "hidden": 1,
+   "options": "Inspection Insulator Table"
+  },
+  {
+   "fieldname": "place_of_inspection",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Place of Inspection"
+  },
+  {
+   "fieldname": "no_of_days_for_inspection",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "No. of days for Inspection"
+  },
+  {
+   "fieldname": "contact_person",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Contact Person"
+  },
+  {
+   "fieldname": "weekly_off_day",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Weekly off day",
+   "options": "Sunday\nMonday\nTuesday\nWednesday\nThursday\nFriday\nSaturday"
+  },
+  {
+   "fieldname": "column_break_hecp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_tsou",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "to",
+   "fieldtype": "Small Text",
+   "label": "To"
+  },
+  {
+   "fieldname": "body",
+   "fieldtype": "Text Editor",
+   "label": "Body"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-06-05 15:51:29.946930",
+ "modified_by": "Administrator",
+ "module": "HRC Infra",
+ "name": "General Letter",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

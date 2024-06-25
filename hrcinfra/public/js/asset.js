@@ -9,7 +9,7 @@ frappe.ui.form.on('Asset', {
             };
         });
     },
-    
+
 
     // Clear the 'custom_asset' field if 'custom_asset_type' changes
     custom_asset_type: function(frm) {

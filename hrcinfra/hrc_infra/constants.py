@@ -1,2 +1,1 @@
-
-letter_types = ["Inspection Insulator","Shutdown","Shutdown Return"]
+letter_types = ["Inspection Insulator", "Shutdown", "Shutdown Return"]

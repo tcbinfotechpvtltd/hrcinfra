@@ -28,7 +28,7 @@ app_license = "mit"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-doctype_js = {"Asset" : "public/js/asset.js"}
+doctype_js = {"Asset": "public/js/asset.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -123,14 +123,12 @@ doctype_js = {"Asset" : "public/js/asset.js"}
 # Hook on document methods and events
 
 doc_events = {
-    "Asset": {
-        "validate": "hrcinfra.doc_events_hooks.asset.validate"
-    }
-	# "*": {
-	# 	"on_update": "method",
-	# 	"on_cancel": "method",
-	# 	"on_trash": "method"
-	# }
+    "Asset": {"validate": "hrcinfra.doc_events_hooks.asset.validate"}
+    # "*": {
+    # 	"on_update": "method",
+    # 	"on_cancel": "method",
+    # 	"on_trash": "method"
+    # }
 }
 
 # Scheduled Tasks
@@ -223,7 +221,7 @@ doc_events = {
 # 	"hrcinfra.auth.validate"
 # ]
 
-# Automatically update python controller files with type annotations for this app.
+# Automatically update python controller files with type annotations for this app. # noqa: 501
 # export_python_type_annotations = True
 
 # default_log_clearing_doctypes = {

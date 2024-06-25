@@ -6,10 +6,8 @@ from frappe.model.document import Document
 
 
 class MiscellaneousExpense(Document):
-
     def on_submit(self):
         self.create_journal_entry()
-
 
     def create_journal_entry(self):
         try:

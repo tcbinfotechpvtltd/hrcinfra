@@ -28,7 +28,13 @@ app_license = "mit"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-doctype_js = {"Asset": "public/js/asset.js"}
+doctype_js = {
+    "Asset": "public/js/asset.js",
+    "Project": "public/js/project.js",
+    "Timesheet": "public/js/timesheet.js",
+}
+
+
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -123,7 +129,13 @@ doctype_js = {"Asset": "public/js/asset.js"}
 # Hook on document methods and events
 
 doc_events = {
-    "Asset": {"validate": "hrcinfra.doc_events_hooks.asset.validate"}
+    "Asset": {"validate": "hrcinfra.doc_events_hooks.asset.validate"},
+    "Project": {
+        "after_insert": "hrcinfra.doc_events_hooks.project.after_insert"
+    },
+    "Timesheet": {
+        "on_submit": "hrcinfra.doc_events_hooks.timesheet.on_submit"
+    },
     # "*": {
     # 	"on_update": "method",
     # 	"on_cancel": "method",
@@ -133,14 +145,15 @@ doc_events = {
 
 # Scheduled Tasks
 # ---------------
-
+# In your_app/your_app/doctype/vehicle/vehicle.py
+# In hooks.py
 # scheduler_events = {
 # 	"all": [
 # 		"hrcinfra.tasks.all"
 # 	],
-# 	"daily": [
-# 		"hrcinfra.tasks.daily"
-# 	],
+# "daily": [
+# 	"hrcinfra.tasks.daily"
+# ],
 # 	"hourly": [
 # 		"hrcinfra.tasks.hourly"
 # 	],
@@ -221,7 +234,7 @@ doc_events = {
 # 	"hrcinfra.auth.validate"
 # ]
 
-# Automatically update python controller files with type annotations for this app. # noqa: 501
+# Automatically update python controller files with type annotations for this a
 # export_python_type_annotations = True
 
 # default_log_clearing_doctypes = {

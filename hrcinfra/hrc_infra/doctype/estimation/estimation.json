@@ -1,0 +1,117 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:ES-{project}-{###}",
+ "creation": "2024-08-10 13:36:16.487353",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "project",
+  "column_break_obnz",
+  "customer",
+  "section_break_ncmt",
+  "product_table",
+  "section_break_rcdv",
+  "overhead",
+  "overhead_amount",
+  "column_break_ccsg",
+  "profit_perc",
+  "profit_margin_amount",
+  "section_break_swmf",
+  "total_estimated_amount"
+ ],
+ "fields": [
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project",
+   "unique": 1
+  },
+  {
+   "fieldname": "column_break_obnz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "section_break_ncmt",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "product_table",
+   "fieldtype": "Table",
+   "label": "Products",
+   "options": "Estimation Item"
+  },
+  {
+   "fieldname": "section_break_rcdv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "overhead",
+   "fieldtype": "Percent",
+   "label": "Overhead %"
+  },
+  {
+   "fieldname": "overhead_amount",
+   "fieldtype": "Float",
+   "label": "Overhead Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_ccsg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "profit_perc",
+   "fieldtype": "Percent",
+   "label": "Profit or Margin %"
+  },
+  {
+   "fieldname": "profit_margin_amount",
+   "fieldtype": "Float",
+   "label": "Profit or Margin Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_swmf",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "total_estimated_amount",
+   "fieldtype": "Float",
+   "label": "Total Estimated Amount ",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-08-10 13:42:22.276644",
+ "modified_by": "Administrator",
+ "module": "HRC Infra",
+ "name": "Estimation",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

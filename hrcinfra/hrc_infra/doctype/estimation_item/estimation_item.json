@@ -14,8 +14,7 @@
   "selling_amount",
   "column_break_anbv",
   "rate",
-  "amount",
-  "link"
+  "amount"
  ],
  "fields": [
   {
@@ -67,12 +66,6 @@
    "label": "Amount"
   },
   {
-   "fieldname": "link",
-   "fieldtype": "Link",
-   "label": "Link ",
-   "options": "estimation_form"
-  },
-  {
    "fieldname": "profit_percentage",
    "fieldtype": "Percent",
    "in_list_view": 1,
@@ -82,7 +75,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-08-11 12:51:53.343072",
+ "modified": "2024-08-11 16:34:57.222198",
  "modified_by": "Administrator",
  "module": "HRC Infra",
  "name": "Estimation Item",

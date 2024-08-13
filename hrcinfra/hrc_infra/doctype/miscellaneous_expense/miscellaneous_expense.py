@@ -17,7 +17,7 @@ class MiscellaneousExpense(Document):
             je = frappe.new_doc("Journal Entry")
             je.voucher_type = "Journal Entry"
             je.posting_date = self.date
-            je.custom_site = self.site
+            # je.custom_site = self.site
 
             # Credit Entry
             je.append(

@@ -229,3 +229,12 @@ doc_events = {
 # }
 
 fixtures = ["Letter Head"]
+doctype_js={
+    'Project':'public/js/project_custom.js',
+}
+
+doc_events={
+    "Project":{
+        "after_insert":"hrcinfra.public.py.project_custom.after_insert"
+    }
+}

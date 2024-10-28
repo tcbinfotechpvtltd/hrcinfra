@@ -1,0 +1,148 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:{item}-{quantity_lost}--{DD}-{MM}-{YY}",
+ "creation": "2024-10-10 14:55:09.639589",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_gfe8",
+  "item",
+  "item_group",
+  "hsn_sac",
+  "column_break_maeq",
+  "date_lost",
+  "location_lost",
+  "quantity_lost",
+  "approximate_value",
+  "section_break_eota",
+  "reported_by",
+  "contact_reported_by",
+  "column_break_atkd",
+  "supervisor",
+  "contact_supervisor",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_gfe8",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Item",
+   "options": "Item",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "item.item_group",
+   "fieldname": "item_group",
+   "fieldtype": "Link",
+   "label": "Item Group",
+   "options": "Item Group"
+  },
+  {
+   "fetch_from": "item.gst_hsn_code",
+   "fieldname": "hsn_sac",
+   "fieldtype": "Link",
+   "label": "HSN/SAC",
+   "options": "GST HSN Code"
+  },
+  {
+   "fieldname": "quantity_lost",
+   "fieldtype": "Int",
+   "label": "Quantity Lost"
+  },
+  {
+   "fieldname": "date_lost",
+   "fieldtype": "Date",
+   "label": "Date Lost"
+  },
+  {
+   "fieldname": "location_lost",
+   "fieldtype": "Link",
+   "label": "Location Lost",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "reported_by",
+   "fieldtype": "Link",
+   "label": "Reported By",
+   "options": "Employee"
+  },
+  {
+   "fieldname": "supervisor",
+   "fieldtype": "Link",
+   "label": "Supervisor (of the Location)",
+   "options": "Employee"
+  },
+  {
+   "fetch_from": "reported_by.cell_number",
+   "fieldname": "contact_reported_by",
+   "fieldtype": "Data",
+   "label": "Contact (Reported By)"
+  },
+  {
+   "fetch_from": "supervisor.cell_number",
+   "fieldname": "contact_supervisor",
+   "fieldtype": "Data",
+   "label": "Contact (Supervisor)"
+  },
+  {
+   "fieldname": "approximate_value",
+   "fieldtype": "Currency",
+   "label": "Approximate Value "
+  },
+  {
+   "fieldname": "column_break_maeq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_eota",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_atkd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Lost Item",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2024-10-11 11:04:40.134182",
+ "modified_by": "Administrator",
+ "module": "HRC Infra",
+ "name": "Lost Item",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

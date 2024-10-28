@@ -154,129 +154,81 @@ function calculate_amount(frm, cdt, cdn) {
 
 frappe.ui.form.on('Estimation', {
     refresh: function (frm) {
-        frm.add_custom_button(__("Create Quotation"), function () {
-            let promises = frm.doc.product_table.map(row => {
-                return new Promise((resolve) => {
-                    frappe.db.get_value('Item', row.item, ['item_name', 'stock_uom'], (r) => {
-                        resolve({
-                            itemData: {
-                                item_name: row.item,
-                                item_name: r.item_name,
-                                uom: r.stock_uom,
-                                qty: row.quantity,
-                                rate: row.selling_rate,
-                                amount: row.selling_amount,
-                            },
-                            customItemData: {
-                                item: row.item,
-                                item_name: r.item_name,
-                                uom: r.stock_uom,
-                                quantity: row.quantity,
-                                selling_rate: row.selling_rate,
-                                selling_amount: row.selling_amount,
-                            }
-                        });
-                    });
-                });
-            });
+        // frm.add_custom_button(__("Create Quotation"), function () {
+        //     let promises = frm.doc.product_table.map(row => {
+        //         return new Promise((resolve) => {
+        //             frappe.db.get_value('Item', row.item, ['item_name', 'stock_uom'], (r) => {
+        //                 resolve({
+        //                     itemData: {
+        //                         item_name: row.item,
+        //                         item_name: r.item_name,
+        //                         uom: r.stock_uom,
+        //                         qty: row.quantity,
+        //                         rate: row.selling_rate,
+        //                         amount: row.selling_amount,
+        //                     },
+        //                     customItemData: {
+        //                         item: row.item,
+        //                         item_name: r.item_name,
+        //                         uom: r.stock_uom,
+        //                         quantity: row.quantity,
+        //                         selling_rate: row.selling_rate,
+        //                         selling_amount: row.selling_amount,
+        //                     }
+        //                 });
+        //             });
+        //         });
+        //     });
 
-            Promise.all(promises).then(itemsData => {
-                console.log('Items to be added:', itemsData);
-                frappe.model.with_doctype('Quotation', function () {
-                    let doc = frappe.model.get_new_doc('Quotation');
-                    doc.quotation_to = 'Customer';
-                    doc.party_name = frm.doc.customer;
-                    doc.custom_estimation_id = frm.doc.name;
+        //     Promise.all(promises).then(itemsData => {
+        //         console.log('Items to be added:', itemsData);
+        //         frappe.model.with_doctype('Quotation', function () {
+        //             let doc = frappe.model.get_new_doc('Quotation');
+        //             doc.quotation_to = 'Customer';
+        //             doc.party_name = frm.doc.customer;
+        //             doc.custom_estimation_id = frm.doc.name;
 
-                    let total_qty = 0;
-                    let total_amount = 0;
+        //             let total_qty = 0;
+        //             let total_amount = 0;
 
-                    itemsData.forEach(data => {
-                        let itemRow = frappe.model.add_child(doc, 'items');
-                        Object.assign(itemRow, data.itemData);
+        //             itemsData.forEach(data => {
+        //                 let itemRow = frappe.model.add_child(doc, 'items');
+        //                 Object.assign(itemRow, data.itemData);
 
-                        let customItemRow = frappe.model.add_child(doc, 'custom_estimated_items');
-                        Object.assign(customItemRow, data.customItemData);
+        //                 let customItemRow = frappe.model.add_child(doc, 'custom_estimated_items');
+        //                 Object.assign(customItemRow, data.customItemData);
 
-                        // Update totals
-                        total_qty += flt(data.customItemData.quantity);
-                        total_amount += flt(data.customItemData.selling_amount);
-                    });
+        //                 // Update totals
+        //                 total_qty += flt(data.customItemData.quantity);
+        //                 total_amount += flt(data.customItemData.selling_amount);
+        //             });
 
-                    // Set the calculated totals
-                    doc.total_qty = total_qty;
-                    doc.total = total_amount;
+        //             // Set the calculated totals
+        //             doc.total_qty = total_qty;
+        //             doc.total = total_amount;
 
-                    frappe.set_route('Form', 'Quotation', doc.name);
-                });
-            }).catch(error => {
-                console.error('Error creating quotation:', error);
-                frappe.throw(__('Error creating quotation. Please check the console for details.'));
-            });
-        });
-    }
-});
-frappe.ui.form.on('Quotation', {
-    refresh: function(frm) {
-        // Function to toggle visibility
-        function toggleTables() {
-            if (frm.doc.custom_estimation_id) {
-                frm.set_df_property('custom_estimated_items', 'hidden', 0);
-                frm.set_df_property('items', 'hidden', 1);
-            } else {
-                frm.set_df_property('custom_estimated_items', 'hidden', 1);
-                frm.set_df_property('items', 'hidden', 0);
-            }
-        }
+        //             frappe.set_route('Form', 'Quotation', doc.name);
+        //         });
+        //     }).catch(error => {
+        //         console.error('Error creating quotation:', error);
+        //         frappe.throw(__('Error creating quotation. Please check the console for details.'));
+        //     });
+        // });
 
-        // Call the function on refresh
-        toggleTables();
-
-        // Also toggle when custom_estimation_id changes
-        frm.fields_dict['custom_estimation_id'].df.onchange = function() {
-            toggleTables();
-        };
-    },
-
-    // Handle visibility when a new doc is loaded or created
-    onload: function(frm) {
-        if (frm.doc.custom_estimation_id) {
-            frm.set_df_property('custom_estimated_items', 'hidden', 0);
-            frm.set_df_property('items', 'hidden', 1);
-        } else {
-            frm.set_df_property('custom_estimated_items', 'hidden', 1);
-            frm.set_df_property('items', 'hidden', 0);
-        }
+        frm.add_custom_button('Quotation',()=>{
+            frappe.call({
+                method:'hrcinfra.hrc_infra.doctype.estimation.estimation.get_estimation',
+                args:{
+                    estimation_doc: frm.doc.name,
+                },
+                callback:(r)=>{
+                    if(r.message){
+                        frappe.set_route('Form','Quotation',r.message)
+                    }
+                }
+            })
+        },"Create")
     }
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Adding a new project adds a new warehourse.

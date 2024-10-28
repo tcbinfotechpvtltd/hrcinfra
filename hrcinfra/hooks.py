@@ -230,11 +230,29 @@ doc_events = {
 
 fixtures = ["Letter Head"]
 doctype_js={
-    'Project':'public/js/project_custom.js',
+    'Employee Attendance Tool':'public/js/employee_attendance_sheet_custom.js',
+    'Timesheet':'public/js/timesheet_custom.js',
+    'Opportunity':'public/js/opportunity_custom.js',
+    'Activity Type':'public/js/activity_type_custom.js',
+    'Warehouse':'public/js/warehouse_custom.js',
 }
 
-doc_events={
-    "Project":{
-        "after_insert":"hrcinfra.public.py.project_custom.after_insert"
-    }
+from hrms.hr.doctype.employee_attendance_tool.employee_attendance_tool import get_employees
+
+
+doc_events = {
+    "Project": {
+        "after_insert": "hrcinfra.public.py.project_custom.after_insert"
+    },
+    "Employee Attendance Tool":{
+        "create_reports_field":"hrcinfra.public.py.employee_attendance_tool_custom.create_reports_field"
+    },
+    'Opportunity':{
+        'items_from_opportunity_to_estimation':'hrcinfra.public.py.opportunity_custom.items_from_opportunity_to_estimation'
+    },
+}
+
+
+override_whitelisted_methods = {
+    "hrms.hr.doctype.employee_attendance_tool.employee_attendance_tool.get_employees": "hrcinfra.public.py.employee_attendance_tool_custom.get_employees"
 }

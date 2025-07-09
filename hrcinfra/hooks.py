@@ -242,7 +242,7 @@ from hrms.hr.doctype.employee_attendance_tool.employee_attendance_tool import ge
 
 doc_events = {
     "Project": {
-        "after_insert": "hrcinfra.public.py.project_custom.after_insert"
+        # "after_insert": "hrcinfra.public.py.project_custom.after_insert"
     },
     "Employee Attendance Tool":{
         "create_reports_field":"hrcinfra.public.py.employee_attendance_tool_custom.create_reports_field"

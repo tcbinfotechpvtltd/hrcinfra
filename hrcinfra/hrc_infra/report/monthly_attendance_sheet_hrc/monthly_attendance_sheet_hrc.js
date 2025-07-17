@@ -61,7 +61,7 @@ frappe.query_reports["Monthly Attendance Sheet HRC"] = {
 			fieldname: "group_by",
 			label: __("Group By"),
 			fieldtype: "Select",
-			options: ["", "Branch", "Grade", "Department", "Designation"],
+			options: ["", "Branch", "Grade", "Department", "Designation","Project"],
 		},
 		{
 			fieldname: "summarized_view",

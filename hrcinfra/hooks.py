@@ -28,7 +28,9 @@ app_license = "mit"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-doctype_js = {"Asset": "public/js/asset.js"}
+doctype_js = {
+    "Asset": "public/js/asset.js",
+}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -229,26 +231,28 @@ doc_events = {
 # }
 
 fixtures = ["Letter Head"]
-doctype_js={
-    'Employee Attendance Tool':'public/js/employee_attendance_sheet_custom.js',
-    'Timesheet':'public/js/timesheet_custom.js',
-    'Opportunity':'public/js/opportunity_custom.js',
-    'Activity Type':'public/js/activity_type_custom.js',
-    'Warehouse':'public/js/warehouse_custom.js',
+doctype_js = {
+    "Employee Attendance Tool": "public/js/employee_attendance_sheet_custom.js",
+    "Timesheet": "public/js/timesheet_custom.js",
+    "Opportunity": "public/js/opportunity_custom.js",
+    "Activity Type": "public/js/activity_type_custom.js",
+    "Warehouse": "public/js/warehouse_custom.js",
 }
 
-from hrms.hr.doctype.employee_attendance_tool.employee_attendance_tool import get_employees
+from hrms.hr.doctype.employee_attendance_tool.employee_attendance_tool import (
+    get_employees,
+)
 
 
 doc_events = {
     "Project": {
         # "after_insert": "hrcinfra.public.py.project_custom.after_insert"
     },
-    "Employee Attendance Tool":{
-        "create_reports_field":"hrcinfra.public.py.employee_attendance_tool_custom.create_reports_field"
+    "Employee Attendance Tool": {
+        "create_reports_field": "hrcinfra.public.py.employee_attendance_tool_custom.create_reports_field"
     },
-    'Opportunity':{
-        'items_from_opportunity_to_estimation':'hrcinfra.public.py.opportunity_custom.items_from_opportunity_to_estimation'
+    "Opportunity": {
+        "items_from_opportunity_to_estimation": "hrcinfra.public.py.opportunity_custom.items_from_opportunity_to_estimation"
     },
 }
 

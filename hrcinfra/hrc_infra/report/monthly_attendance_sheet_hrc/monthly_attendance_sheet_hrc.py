@@ -3,6 +3,7 @@
 
 
 from calendar import monthrange
+from collections import defaultdict
 from itertools import groupby
 
 import frappe
@@ -74,6 +75,7 @@ def get_columns(filters: Filters) -> list[dict]:
 			"Grade": "Employee Grade",
 			"Department": "Department",
 			"Designation": "Designation",
+			"Project": "Project"
 		}
 		options = options_mapping.get(filters.group_by)
 		columns.append(
@@ -178,25 +180,67 @@ def get_total_days_in_month(filters: Filters) -> int:
 	return monthrange(cint(filters.year), cint(filters.month))[1]
 
 
+# def get_data(filters: Filters, attendance_map: dict) -> list[dict]:
+# 	if filters.group_by == "Project":
+# 		employee_details, group_by_param_values = get_employee_project_grouping(filters)
+# 	else:
+# 		employee_details, group_by_param_values = get_employee_related_details(filters)
+# 	holiday_map = get_holiday_map(filters)
+# 	data = []
+
+# 	if filters.group_by:
+# 		group_by_column = frappe.scrub(filters.group_by)
+
+# 		for value in group_by_param_values:
+# 			if not value:
+# 				continue
+
+# 			records = get_rows(employee_details[value], filters, holiday_map, attendance_map)
+
+# 			if records:
+# 				data.append({group_by_column: value})
+# 				data.extend(records)
+# 	else:
+# 		data = get_rows(employee_details, filters, holiday_map, attendance_map)
+
+# 	return data
 def get_data(filters: Filters, attendance_map: dict) -> list[dict]:
-	employee_details, group_by_param_values = get_employee_related_details(filters)
 	holiday_map = get_holiday_map(filters)
 	data = []
 
-	if filters.group_by:
+	if filters.group_by == "Project":
+		project_map, group_by_param_values = get_employee_project_grouping(filters)
 		group_by_column = frappe.scrub(filters.group_by)
 
-		for value in group_by_param_values:
-			if not value:
+		for project in group_by_param_values:
+			if not project:
 				continue
 
-			records = get_rows(employee_details[value], filters, holiday_map, attendance_map)
+			emp_dict = project_map.get(project)
+			if not emp_dict:
+				continue
 
+			records = get_rows(emp_dict, filters, holiday_map, None, project)
 			if records:
-				data.append({group_by_column: value})
+				data.append({group_by_column: project})
 				data.extend(records)
+
 	else:
-		data = get_rows(employee_details, filters, holiday_map, attendance_map)
+		employee_details, group_by_param_values = get_employee_related_details(filters)
+		if filters.group_by:
+			group_by_column = frappe.scrub(filters.group_by)
+
+			for value in group_by_param_values:
+				if not value:
+					continue
+
+				records = get_rows(employee_details[value], filters, holiday_map, attendance_map)
+
+				if records:
+					data.append({group_by_column: value})
+					data.extend(records)
+		else:
+			data = get_rows(employee_details, filters, holiday_map, attendance_map)
 
 	return data
 
@@ -365,11 +409,17 @@ def get_holiday_map(filters: Filters) -> dict[str, list[dict]]:
 	return holiday_map
 
 
-def get_rows(employee_details: dict, filters: Filters, holiday_map: dict, attendance_map: dict) -> list[dict]:
+def get_rows(employee_details: dict, filters: Filters, holiday_map: dict, attendance_map: dict, project_name=None) -> list[dict]:
 	records = []
 	default_holiday_list = frappe.get_cached_value("Company", filters.company, "default_holiday_list")
+	if isinstance(employee_details, dict):
+		employee_items = employee_details.items()
+	else:
+		frappe.throw(_("Invalid employee details format."))
 
-	for employee, details in employee_details.items():
+
+	for employee, details in employee_items:	
+
 		emp_holiday_list = details.holiday_list or default_holiday_list
 		holidays = holiday_map.get(emp_holiday_list)
 
@@ -389,16 +439,23 @@ def get_rows(employee_details: dict, filters: Filters, holiday_map: dict, attend
 
 			records.append(row)
 		else:
-			employee_attendance = attendance_map.get(employee)
+			employee_attendance = None
+			if filters.group_by == "Project" and details.get("attendance_records"):
+				employee_attendance = build_attendance_map_from_records(details["attendance_records"])
+			else:
+				employee_attendance = attendance_map.get(employee)
+
 			if not employee_attendance:
 				continue
 
 			attendance_for_employee = get_attendance_status_for_detailed_view(
 				employee, filters, employee_attendance, holidays
 			)
+
 			# set employee details in the first row
 			attendance_for_employee[0].update({"employee": employee, "employee_name": details.employee_name})
-
+			if filters.group_by == "Project":
+				attendance_for_employee[0]["project"] = project_name
 			records.extend(attendance_for_employee)
 
 	return records
@@ -501,10 +558,12 @@ def get_attendance_status_for_detailed_view(
 	        {'shift': 'Evening Shift', 1: 'P', 2: 'A', 3: 'P'....}
 	]
 	"""
+
 	total_days = get_total_days_in_month(filters)
 	attendance_values = []
 
 	for shift, status_dict in employee_attendance.items():
+
 		row = {"shift": shift}
 
 		for day in range(1, total_days + 1):
@@ -649,3 +708,136 @@ def get_chart_data(attendance_map: dict, filters: Filters) -> dict:
 		"type": "line",
 		"colors": ["red", "green", "blue"],
 	}
+def get_employee_project_grouping(filters: Filters) -> tuple[dict, list]:
+	"""
+	Groups employees by project based on their actual attendance records.
+	Each attendance record appears in its respective project group.
+	If an employee has attendance both with and without projects,
+	they will appear in both groups with their respective attendance records.
+	"""
+	from collections import defaultdict
+
+	# Get all attendance records for the month
+	Attendance = frappe.qb.DocType("Attendance")
+
+	query = (
+		frappe.qb.from_(Attendance)
+		.select(
+			Attendance.employee,
+			Attendance.custom_project,
+			Attendance.attendance_date,
+			Attendance.status,
+			Attendance.shift,
+			Extract("day", Attendance.attendance_date).as_("day_of_month")
+		)
+		.where(
+			(Attendance.docstatus == 1)
+			& (Attendance.company == filters.company)
+			& (Extract("month", Attendance.attendance_date) == filters.month)
+			& (Extract("year", Attendance.attendance_date) == filters.year)
+		)
+		.orderby(Attendance.employee, Attendance.attendance_date)
+	)
+
+	if filters.employee:
+		query = query.where(Attendance.employee == filters.employee)
+
+	attendance_records = query.run(as_dict=True)
+
+	# Get employee details
+	Employee = frappe.qb.DocType("Employee")
+	emp_query = (
+		frappe.qb.from_(Employee)
+		.select(
+			Employee.name,
+			Employee.employee_name,
+			Employee.designation,
+			Employee.grade,
+			Employee.department,
+			Employee.branch,
+			Employee.company,
+			Employee.holiday_list,
+			Employee.reports_to,
+		)
+		.where(Employee.company == filters.company)
+	)
+
+	if filters.reports_to:
+		emp_query = emp_query.where(Employee.reports_to == filters.reports_to)
+
+	if filters.employee:
+		emp_query = emp_query.where(Employee.name == filters.employee)
+
+	employee_details = emp_query.run(as_dict=True)
+
+	# Create employee details dictionary
+	emp_details_dict = {}
+	for emp in employee_details:
+		emp_details_dict[emp.name] = frappe._dict(emp)
+
+	# Group attendance records by project - each record goes to its respective group
+	project_employees = defaultdict(lambda: defaultdict(list))
+
+	for record in attendance_records:
+		employee = record.employee
+		project = record.custom_project
+		
+		# Determine project group for this specific attendance record
+		# Only add to one group based on the project assignment for that specific date
+		if project:
+			project_key = project
+		else:
+			project_key = "No Project"
+		
+		# Add this specific attendance record to the employee under this project ONLY
+		project_employees[project_key][employee].append(record)
+
+	# Build the final result structure
+	project_map = {}
+	project_list = []
+
+	for project, employees in project_employees.items():
+		project_map[project] = {}	
+		
+		for employee, employee_attendance_records in employees.items():
+			if employee in emp_details_dict:
+				# Create a copy of employee details for this project
+				emp_data = emp_details_dict[employee].copy()
+				
+				# Add attendance records specific to this project
+				# Double-check: only include records that actually belong to this project
+				filtered_records = []
+				for rec in employee_attendance_records:
+					project_val = rec.custom_project or ""
+					if (project == "No Project" and not project_val) or (project != "No Project" and project_val == project):
+						filtered_records.append(rec)
+
+				
+				emp_data['attendance_records'] = filtered_records
+				
+				project_map[project][employee] = emp_data
+		
+		# Only add project to list if it has employees
+		if project_map[project]:
+			project_list.append(project)
+
+	# Sort project list to have "No Project" first if it exists
+	project_list.sort(key=lambda x: (x != "No Project", x))
+
+	
+
+
+	return project_map, project_list
+
+
+def build_attendance_map_from_records(records):
+	"""Builds a shift-wise day-wise attendance map from filtered attendance records"""
+
+	result = {}
+	for rec in records:
+		shift = rec.shift or ""
+		day = rec.day_of_month
+		status = rec.status
+		result.setdefault(shift, {})[day] = status
+	return result
+

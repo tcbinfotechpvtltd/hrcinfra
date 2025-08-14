@@ -33,9 +33,12 @@ def execute(filters: Filters | None = None) -> tuple:
 		frappe.throw(_("Please select month and year."))
 
 	attendance_map = get_attendance_map(filters)
+	# if not attendance_map:
+	# 	frappe.msgprint(_("No attendance records found."), alert=True, indicator="orange")
+	# 	return [], [], None, None
 	if not attendance_map:
-		frappe.msgprint(_("No attendance records found."), alert=True, indicator="orange")
-		return [], [], None, None
+		frappe.msgprint(_("No attendance records found for this month — showing all employees with 0 attendance."), alert=True, indicator="orange")
+
 
 	columns = get_columns(filters)
 	data = get_data(filters, attendance_map)
@@ -84,7 +87,7 @@ def get_columns(filters: Filters) -> list[dict]:
 				"fieldname": frappe.scrub(filters.group_by),
 				"fieldtype": "Link",
 				"options": options,
-				"width": 120,
+				"width": 250,
 			}
 		)
 
@@ -95,9 +98,15 @@ def get_columns(filters: Filters) -> list[dict]:
 				"fieldname": "employee",
 				"fieldtype": "Link",
 				"options": "Employee",
-				"width": 135,
+				"width": 235,
 			},
-			{"label": _("Employee Name"), "fieldname": "employee_name", "fieldtype": "Data", "width": 120},
+			# To Add Employee Field Name Columns.
+			# {"label": _("Employee Name"), "fieldname": "employee_name", "fieldtype": "Data", "width": 120},
+			
+			# Calculate Base Adn Current Salary 
+			{"label": _("Base Salary"), "fieldname": "base_salary", "fieldtype": "Currency", "width": 130},
+			{"label": _("Salary"), "fieldname": "current_salary", "fieldtype": "Currency", "width": 140},
+
 		]
 	)
 
@@ -221,8 +230,13 @@ def get_data(filters: Filters, attendance_map: dict) -> list[dict]:
 				continue
 
 			records = get_rows(emp_dict, filters, holiday_map, None, project)
+			# Fetch Project Name With Project Id
+			for row in records:
+				if row.get("project"):
+					row["project_name"] = frappe.db.get_value("Project", row["project"], "project_name")
 			if records:
 				data.append({group_by_column: project})
+				# Showing Project Name With Project Id
 				data.extend(records)
 
 	else:
@@ -426,12 +440,28 @@ def get_rows(employee_details: dict, filters: Filters, holiday_map: dict, attend
 		if filters.summarized_view:
 			attendance = get_attendance_status_for_summarized_view(employee, filters, holidays)
 			if not attendance:
-				continue
+				attendance = {
+                    "total_present": 0,
+                    "total_absent": 0,
+                    "total_leaves": 0,
+                    "total_half_days": 0,
+                    "total_holidays": 0,
+                    "unmarked_days": total_days_in_month
+                }
 
 			leave_summary = get_leave_summary(employee, filters)
 			entry_exits_summary = get_entry_exits_summary(employee, filters)
+			
+			# Fetch base salary from Employee Field custom_salary_amount
+			base_salary = frappe.db.get_value("Employee", employee, "custom_salary_amount") or 0
+			total_days_in_month = get_total_days_in_month(filters)
+			present_days = attendance["total_present"]
+			current_salary = 0
+			if base_salary and total_days_in_month:
+				current_salary = (base_salary / total_days_in_month) * present_days
 
-			row = {"employee": employee, "employee_name": details.employee_name}
+			row = {"employee": employee, "employee_name": details.employee_name,"base_salary": base_salary,"current_salary": round(current_salary, 2)}
+
 			set_defaults_for_summarized_view(filters, row)
 			row.update(attendance)
 			row.update(leave_summary)
@@ -451,9 +481,26 @@ def get_rows(employee_details: dict, filters: Filters, holiday_map: dict, attend
 			attendance_for_employee = get_attendance_status_for_detailed_view(
 				employee, filters, employee_attendance, holidays
 			)
+			# Calculate Base Salary And Current Salary
+			base_salary = frappe.db.get_value("Employee", employee, "custom_salary_amount") or 0
+			total_days_in_month = get_total_days_in_month(filters)
+
+			# Calculate Present Days from daily columns
+			present_days_count = 0
+			for shift_row in attendance_for_employee:
+				for day in range(1, total_days_in_month + 1):
+					val = shift_row.get(str(day), "")
+					if val in ("P", "WFH"):
+						present_days_count += 1
+					elif val == "HD":  # Half Day counts as 0.5
+						present_days_count += 0.5
+			# Prevent double counting if multiple shifts
+			present_days = min(present_days_count, total_days_in_month)
+
+			current_salary = (base_salary / total_days_in_month) * present_days if base_salary else 0
 
 			# set employee details in the first row
-			attendance_for_employee[0].update({"employee": employee, "employee_name": details.employee_name})
+			attendance_for_employee[0].update({"employee": employee, "employee_name": details.employee_name,"base_salary": base_salary,"current_salary": round(current_salary, 2)})
 			if filters.group_by == "Project":
 				attendance_for_employee[0]["project"] = project_name
 			records.extend(attendance_for_employee)
